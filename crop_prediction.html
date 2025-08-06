@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Prediction - Agricultural Assistant</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            color: #343a40;
+        }
+        
+        .page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, #38b000 0%, #4cc417 100%);
+            border-radius: 12px;
+            margin-bottom: 2.5rem;
+            padding: 3.5rem 2rem;
+            color: white;
+            box-shadow: 0 10px 25px rgba(56, 176, 0, 0.25);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 300px;
+            background-image: url('https://placehold.co/500x500');
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.1;
+            transform: translate(20%, -20%);
+        }
+        
+        .app-title {
+            font-weight: 700;
+            margin-bottom: 1rem;
+            font-size: 3rem;
+        }
+        
+        .app-subtitle {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .main-card {
+            border-radius: 12px;
+            border: none;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2.5rem;
+            background-color: white;
+            overflow: hidden;
+        }
+        
+        .card-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            padding: 1.25rem 1.5rem;
+        }
+        
+        .card-header h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0;
+            font-weight: 600;
+            color: #212529;
+        }
+        
+        .card-body {
+            padding: 2rem;
+        }
+        
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #495057;
+        }
+        
+        .form-control {
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+        
+        .form-control:focus {
+            border-color: #38b000;
+            box-shadow: 0 0 0 0.25rem rgba(56, 176, 0, 0.15);
+        }
+        
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        
+        .input-icon {
+            position: relative;
+        }
+        
+        .input-icon i {
+            position: absolute;
+            top: 50%;
+            left: 1rem;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+        
+        .input-icon input {
+            padding-left: 2.5rem;
+        }
+        
+        .btn {
+            border-radius: 8px;
+            padding: 0.75rem 1.75rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #38b000 0%, #4cc417 100%);
+            border: none;
+            box-shadow: 0 4px 10px rgba(56, 176, 0, 0.3);
+        }
+        
+        .btn-primary:hover, .btn-primary:focus {
+            background: linear-gradient(135deg, #2d9000 0%, #3fa513 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(56, 176, 0, 0.35);
+        }
+        
+        .btn-outline-secondary {
+            border: 2px solid #6c757d;
+            color: #6c757d;
+            background: transparent;
+        }
+        
+        .btn-outline-secondary:hover {
+            background-color: #6c757d;
+            color: white;
+        }
+        
+        .parameter-card {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            height: 100%;
+            transition: all 0.3s ease;
+            border: 1px solid #e9ecef;
+        }
+        
+        .parameter-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .parameter-card-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #212529;
+            font-size: 1rem;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .result-card {
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .result-success {
+            background-color: rgba(56, 176, 0, 0.1);
+            border-left: 4px solid #38b000;
+        }
+        
+        .result-error {
+            background-color: rgba(220, 53, 69, 0.1);
+            border-left: 4px solid #dc3545;
+        }
+        
+        .result-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #212529;
+        }
+        
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: #495057;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .back-link:hover {
+            color: #38b000;
+        }
+        
+        .section-title {
+            position: relative;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: #38b000;
+            border-radius: 3px;
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .loading-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(56, 176, 0, 0.2);
+            border-radius: 50%;
+            border-top-color: #38b000;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .app-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-section {
+                padding: 2.5rem 1.5rem;
+            }
+            
+            .card-body {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <div class="page-container">
+        <div class="hero-section text-center">
+            <h1 class="app-title">Smart Crop Recommendation</h1>
+            <p class="app-subtitle">Get intelligent crop recommendations based on your soil's nutrient profile and conditions</p>
+        </div>
+
+        <div class="main-card">
+            <div class="card-header">
+                <h2><i class="fas fa-seedling me-2"></i>Soil Parameters Analysis</h2>
+            </div>
+            <div class="card-body">
+                <form id="cropPredictionForm">
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h4 class="section-title">Primary Nutrients</h4>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="parameter-card">
+                                <label class="parameter-card-title">Nitrogen (N)</label>
+                                <div class="input-icon">
+                                    <i class="fas fa-flask"></i>
+                                    <input type="number" class="form-control" name="nitrogen" placeholder="0-250" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="parameter-card">
+                                <label class="parameter-card-title">Phosphorus (P)</label>
+                                <div class="input-icon">
+                                    <i class="fas fa-flask"></i>
+                                    <input type="number" class="form-control" name="phosphorus" placeholder="0-250" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="parameter-card">
+                                <label class="parameter-card-title">Potassium (K)</label>
+                                <div class="input-icon">
+                                    <i class="fas fa-flask"></i>
+                                    <input type="number" class="form-control" name="potassium" placeholder="0-250" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h4 class="section-title">Soil Properties</h4>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="parameter-card">
+                                <label class="parameter-card-title">pH Level</label>
+                                <div class="input-icon">
+                                    <i class="fas fa-vial"></i>
+                                    <input type="number" class="form-control" name="ph" placeholder="0-14" step="0.1" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="parameter-card">
+                                <label class="parameter-card-title">EC Value</label>
+                                <div class="input-icon">
+                                    <i class="fas fa-bolt"></i>
+                                    <input type="number" class="form-control" name="ec" placeholder="0-1" step="0.01" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h4 class="section-title">Secondary Nutrients</h4>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="parameter-card">
+                                <label class="parameter-card-title">Sulfur (S)</label>
+                                <div class="input-icon">
+                                    <i class="fas fa-atom"></i>
+                                    <input type="number" class="form-control" name="sulfur" placeholder="0-1" step="0.01" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="parameter-card">
+                                <label class="parameter-card-title">Boron (B)</label>
+                                <div class="input-icon">
+                                    <i class="fas fa-atom"></i>
+                                    <input type="number" class="form-control" name="boron" placeholder="Boron content" step="0.01" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <h4 class="section-title">Micronutrients</h4>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="parameter-card">
+                                <label class="parameter-card-title">Copper (Cu)</label>
+                                <div class="input-icon">
+                                    <i class="fas fa-microscope"></i>
+                                    <input type="number" class="form-control" name="copper" placeholder="Copper content" step="0.01" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="parameter-card">
+                                <label class="parameter-card-title">Iron (Fe)</label>
+                                <div class="input-icon">
+                                    <i class="fas fa-microscope"></i>
+                                    <input type="number" class="form-control" name="iron" placeholder="Iron content" step="0.01" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="parameter-card">
+                                <label class="parameter-card-title">Manganese (Mn)</label>
+                                <div class="input-icon">
+                                    <i class="fas fa-microscope"></i>
+                                    <input type="number" class="form-control" name="manganese" placeholder="Manganese content" step="0.01" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="parameter-card">
+                                <label class="parameter-card-title">Zinc (Zn)</label>
+                                <div class="input-icon">
+                                    <i class="fas fa-microscope"></i>
+                                    <input type="number" class="form-control" name="zinc" placeholder="Zinc content" step="0.01" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 text-center">
+                        <div class="row justify-content-center">
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-primary w-100 mb-3" id="cropSubmitBtn">
+                                    <i class="fas fa-leaf me-2"></i> Generate Crop Recommendation
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-outline-secondary w-100" id="cropClearBtn">
+                                    <i class="fas fa-undo me-2"></i> Clear All Fields
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Result Card -->
+                <div id="cropResult" class="result-card">
+                    <div id="resultContent"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Single Home Button -->
+        <div class="text-center mt-5 mb-4">
+            <a href="/" class="btn btn-outline-success btn-lg px-5">
+                <i class="fas fa-home me-2"></i>Back to Home
+            </a>
+        </div>
+
+        <div class="footer">
+            <p>© 2025 Agricultural Assistant | Smart Crop Prediction Tool</p>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Quick form validation
+        function validateForm() {
+            let valid = true;
+            const inputs = document.querySelectorAll('#cropPredictionForm input');
+            
+            inputs.forEach(input => {
+                if (input.value.trim() === '') {
+                    input.classList.add('is-invalid');
+                    valid = false;
+                } else {
+                    input.classList.remove('is-invalid');
+                }
+            });
+            
+            return valid;
+        }
+        
+        // Loading overlay functions
+        function showLoading() {
+            document.getElementById('loadingOverlay').classList.add('active');
+        }
+        
+        function hideLoading() {
+            document.getElementById('loadingOverlay').classList.remove('active');
+        }
+        
+        // Form submission
+        $('#cropPredictionForm').on('submit', function(e) {
+            e.preventDefault();
+            
+            if (!validateForm()) {
+                return;
+            }
+            
+            const submitBtn = $('#cropSubmitBtn');
+            const resultDiv = $('#cropResult');
+            
+            submitBtn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Analyzing...');
+            showLoading();
+            
+            $.ajax({
+                url: '/predict_crop',
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function(response) {
+                    resultDiv.show();
+                    
+                    if (!response.success) {
+                        resultDiv.removeClass('result-success').addClass('result-error');
+                        $('#resultContent').html('<div class="alert alert-danger mb-0"><strong>Error:</strong> ' + response.error + '</div>');
+                    } else {
+                        resultDiv.removeClass('result-error').addClass('result-success');
+                        
+                        // Enhanced result presentation
+                        const crop = response.prediction;
+                        $('#resultContent').html(`
+                            <div class="alert alert-success mb-3">
+                                <strong>Recommended Crop:</strong> <span class="fs-5">${crop}</span>
+                            </div>
+                            <p class="mb-0">Based on your soil parameters, we recommend growing <strong>${crop}</strong>. This recommendation takes into account all provided nutrient levels and soil properties.</p>
+                        `);
+                    }
+                    
+                    // Scroll to result
+                    $('html, body').animate({
+                        scrollTop: resultDiv.offset().top - 100
+                    }, 500);
+                },
+                error: function() {
+                    resultDiv.show().removeClass('result-success').addClass('result-error');
+                    $('#resultContent').html('<div class="alert alert-danger mb-0"><strong>Connection Error:</strong> Failed to connect to the server. Please check your internet connection and try again.</div>');
+                },
+                complete: function() {
+                    submitBtn.prop('disabled', false).html('<i class="fas fa-leaf me-2"></i> Generate Crop Recommendation');
+                    hideLoading();
+                }
+            });
+        });
+        
+        // Clear form
+        $('#cropClearBtn').on('click', function() {
+            $('#cropPredictionForm')[0].reset();
+            $('#cropResult').hide();
+            
+            // Remove validation styling
+            const inputs = document.querySelectorAll('#cropPredictionForm input');
+            inputs.forEach(input => {
+                input.classList.remove('is-invalid');
+            });
+        });
+        
+        // Input validation styling
+        const inputs = document.querySelectorAll('#cropPredictionForm input');
+        inputs.forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.value.trim() === '') {
+                    this.classList.add('is-invalid');
+                } else {
+                    this.classList.remove('is-invalid');
+                }
+            });
+            
+            input.addEventListener('input', function() {
+                if (this.value.trim() !== '') {
+                    this.classList.remove('is-invalid');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

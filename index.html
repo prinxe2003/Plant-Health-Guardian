@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Health Guardian</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-green: #2ecc71;
+            --secondary-green: #27ae60;
+            --accent-green: #1abc9c;
+            --light-background: #f8fafb;
+            --dark-text: #2c3e50;
+            --accent-color: #3498db;
+            --card-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            --hover-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+
+        body {
+            background-color: var(--light-background);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            color: var(--dark-text);
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+            padding: 15px 0;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.4rem;
+        }
+
+        .logo-icon {
+            color: var(--primary-green);
+            font-size: 1.6rem;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            padding: 8px 16px !important;
+            transition: all 0.3s ease;
+            border-radius: 6px;
+        }
+
+        .nav-link.active {
+            color: var(--primary-green) !important;
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+
+        .nav-link:hover {
+            color: var(--primary-green) !important;
+            transform: translateY(-2px);
+        }
+
+        .app-container {
+            padding-top: 3rem;
+            padding-bottom: 4rem;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, rgba(46, 204, 113, 0.1), rgba(39, 174, 96, 0.15));
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background-color: rgba(46, 204, 113, 0.1);
+            z-index: 0;
+        }
+
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            left: -30px;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background-color: rgba(46, 204, 113, 0.1);
+            z-index: 0;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-weight: 700;
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            color: var(--dark-text);
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #576574;
+        }
+
+        .card {
+            border: none;
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.4s ease;
+            overflow: hidden;
+            background-color: white;
+        }
+
+        .card:hover {
+            box-shadow: var(--hover-shadow);
+            transform: translateY(-8px);
+        }
+
+        .card-icon {
+            font-size: 3.2rem;
+            color: var(--primary-green);
+            margin-bottom: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover .card-icon {
+            transform: scale(1.1);
+            color: var(--accent-green);
+        }
+
+        .card-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--dark-text);
+            font-size: 1.4rem;
+        }
+
+        .btn {
+            border-radius: 10px;
+            padding: 0.7rem 1.8rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            font-size: 1rem;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+            border: none;
+            box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, var(--accent-green), var(--primary-green));
+            transform: translateY(-3px);
+            box-shadow: 0 6px 18px rgba(46, 204, 113, 0.4);
+        }
+
+        .btn-success:active {
+            transform: translateY(-1px);
+        }
+
+        .btn i {
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover i {
+            transform: translateX(3px);
+        }
+
+        .upload-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            padding: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--primary-green);
+            border-radius: 12px;
+            padding: 3.5rem 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-area.dragover {
+            background-color: rgba(46, 204, 113, 0.05);
+            border-color: var(--secondary-green);
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 4.5rem;
+            color: var(--primary-green);
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover .upload-icon {
+            transform: translateY(-5px);
+        }
+
+        .preview-container {
+            position: relative;
+            margin: 2rem auto;
+            max-width: 450px;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 350px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .remove-image-btn {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3);
+        }
+
+        .remove-image-btn:hover {
+            background-color: #c0392b;
+            transform: scale(1.15);
+            box-shadow: 0 6px 15px rgba(231, 76, 60, 0.4);
+        }
+
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        .spinner-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .result-window {
+            font-family: 'Inter', sans-serif;
+            max-width: 850px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+        }
+
+        .result-header {
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .confidence-bar {
+            height: 30px;
+            background-color: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary-green), var(--secondary-green));
+            transition: width 1.2s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .treatment-step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 18px;
+            padding: 18px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .treatment-step:hover {
+            background-color: #f0f0f0;
+            transform: translateX(8px);
+            border-left: 3px solid var(--primary-green);
+        }
+
+        .step-number {
+            width: 36px;
+            height: 36px;
+            background-color: var(--primary-green);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 18px;
+            flex-shrink: 0;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3);
+        }
+
+        .list-group-item {
+            border-left: none;
+            border-right: none;
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            transition: all 0.3s ease;
+        }
+
+        .list-group-item:hover {
+            background-color: #f9f9f9;
+            transform: translateX(5px);
+        }
+
+        .list-group-item i {
+            color: var(--primary-green);
+            margin-right: 12px;
+            font-size: 1.1rem;
+        }
+
+        .screen-title {
+            font-weight: 700;
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+            color: var(--dark-text);
+        }
+
+        .screen-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 70px;
+            height: 4px;
+            background-color: var(--primary-green);
+            border-radius: 2px;
+        }
+
+        .alert-detection {
+            background-color: rgba(46, 204, 113, 0.1);
+            border-left: 4px solid var(--primary-green);
+            border-radius: 8px;
+            padding: 20px 25px;
+            margin-bottom: 25px;
+        }
+
+        .alert-detection strong {
+            color: var(--secondary-green);
+            font-size: 1.25rem;
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            position: relative;
+            padding: 2rem 0;
+            margin: 4rem 0;
+        }
+
+        .how-it-works::before {
+            content: '';
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            bottom: 60px;
+            width: 2px;
+            background-color: rgba(46, 204, 113, 0.2);
+            z-index: 0;
+            display: none;
+        }
+
+        @media (min-width: 768px) {
+            .how-it-works::before {
+                display: block;
+            }
+        }
+
+        .step-box {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: var(--card-shadow);
+            padding: 25px;
+            margin-bottom: 30px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .step-box:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+
+        .step-circle {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-green), var(--secondary-green));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+        }
+
+        .features-section {
+            margin: 4rem 0;
+        }
+
+        .feature-box {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            padding: 25px;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            border-top: 5px solid transparent;
+        }
+
+        .feature-box:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+            border-top: 5px solid var(--primary-green);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            width: 70px;
+            height: 70px;
+            background-color: rgba(46, 204, 113, 0.1);
+            color: var(--primary-green);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-box:hover .feature-icon {
+            background-color: var(--primary-green);
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .feature-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--dark-text);
+        }
+
+        /* Footer */
+        footer {
+            background-color: white;
+            padding: 2rem 0;
+            border-top: 1px solid #e0e0e0;
+            margin-top: 4rem;
+        }
+
+        .footer-title {
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            color: var(--dark-text);
+        }
+
+        .footer-link {
+            color: #576574;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-link:hover {
+            color: var(--primary-green);
+            transform: translateX(5px);
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #f1f1f1;
+            color: var(--dark-text);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            background-color: var(--primary-green);
+            color: white;
+            transform: translateY(-5px);
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .fade-in-delay-1 {
+            animation-delay: 0.2s;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out 0.2s forwards;
+        }
+
+        .fade-in-delay-2 {
+            animation-delay: 0.4s;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out 0.4s forwards;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.2rem;
+            }
+
+            .hero-section {
+                padding: 2rem 1rem;
+            }
+
+            .upload-area {
+                padding: 2rem 1rem;
+            }
+            
+            .card-icon {
+                font-size: 2.5rem;
+            }
+            
+            .app-container {
+                padding-top: 1.5rem;
+                padding-bottom: 2rem;
+            }
+            
+            .step-box {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero-title {
+                font-size: 1.8rem;
+            }
+            
+            .btn {
+                padding: 0.5rem 1.2rem;
+                font-size: 0.9rem;
+            }
+            
+            .upload-container {
+                padding: 20px;
+            }
+            
+            .feature-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-leaf logo-icon"></i>
+                Plant Health Guardian
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ms-auto">
+                    <a class="nav-link active" href="/">Home</a>
+                    <a class="nav-link" href="/disease_detection">Disease Detection</a>
+                    <a class="nav-link" href="/crop_prediction">Crop Prediction</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay">
+        <div class="spinner-container">
+            <div class="spinner-border text-success mb-3" style="width: 3rem; height: 3rem;" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p>Processing your request...</p>
+        </div>
+    </div>
+
+    <!-- Home Screen -->
+    <div id="homeScreen" class="container-fluid app-container fade-in">
+        <!-- Hero Section -->
+        <div class="container">
+            <div class="row hero-section mb-5">
+                <div class="col-lg-7 hero-content">
+                    <h1 class="hero-title">Smart Plant Diagnosis & Crop Advisory</h1>
+                    <p class="hero-subtitle">AI-Powered solutions to identify plant diseases and optimize crop yields for sustainable agriculture</p>
+                </div>
+                <div class="col-lg-5 d-none d-lg-block">
+                    <img src="/static/plant home.jpg" alt="Plant Health Guardian" class="img-fluid rounded-3 shadow w-75"> <!-- w-75 makes it 75% of container width -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Navigation Cards -->
+        <div class="container">
+            <div class="row justify-content-center g-4 fade-in-delay-1">
+                <div class="col-md-6 col-lg-5">
+                    <div class="card h-100">
+                        <div class="card-body text-center p-4 p-lg-5">
+                            <i class="fas fa-microscope card-icon"></i>
+                            <h3 class="card-title">Disease Detection</h3>
+                            <p class="card-text mb-4">Upload a leaf image to identify plant diseases and get customized treatment recommendations</p>
+                            <a href="/disease_detection" class="btn btn-success">
+                                <i class="fas fa-leaf me-2"></i>Detect Disease
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-5">
+                    <div class="card h-100">
+                        <div class="card-body text-center p-4 p-lg-5">
+                            <i class="fas fa-seedling card-icon"></i>
+                            <h3 class="card-title">Crop Recommendation</h3>
+                            <p class="card-text mb-4">Enter soil parameters to receive AI-driven crop recommendations for optimal yield</p>
+                            <a href="/crop_prediction" class="btn btn-success">
+                                <i class="fas fa-chart-line me-2"></i>Get Recommendations
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works Section -->
+        <div class="container how-it-works fade-in-delay-2">
+            <div class="row justify-content-center">
+                <div class="col-12 text-center mb-5">
+                    <h2 class="screen-title">How It Works</h2>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-4 mb-4">
+                    <div class="step-box text-center">
+                        <div class="step-circle mx-auto">1</div>
+                        <h4>Upload</h4>
+                        <p class="mb-0">Upload a leaf image or enter soil data parameters through our user-friendly interface</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="step-box text-center">
+                        <div class="step-circle mx-auto">2</div>
+                        <h4>Analyze</h4>
+                        <p class="mb-0">Our advanced AI models analyze your input data with precision and accuracy</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="step-box text-center">
+                        <div class="step-circle mx-auto">3</div>
+                        <h4>Get Results</h4>
+                        <p class="mb-0">Receive detailed diagnosis or recommendations tailored to your specific needs</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="container features-section fade-in-delay-2">
+            <div class="row justify-content-center">
+                <div class="col-12 text-center mb-5">
+                    <h2 class="screen-title">Key Features</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="feature-box h-100">
+                        <div class="feature-icon">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <h4 class="feature-title">Fast & Accurate</h4>
+                        <p class="mb-0">Get results within seconds with our advanced AI algorithms trained on thousands of plant samples</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="feature-box h-100">
+                        <div class="feature-icon">
+                            <i class="fas fa-hand-holding-medical"></i>
+                        </div>
+                        <h4 class="feature-title">Personalized Treatment</h4>
+                        <p class="mb-0">Receive customized treatment plans and prevention strategies for identified plant diseases</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="feature-box h-100">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h4 class="feature-title">Improved Yields</h4>
+                        <p class="mb-0">Increase crop productivity with data-driven recommendations optimized for your specific conditions</p>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="feature-box h-100">
+                        <div class="feature-icon">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <h4 class="feature-title">Sustainable Farming</h4>
+                        <p class="mb-0">Promote environmentally friendly farming practices with precise disease management</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Testimonial Section -->
+        <div class="container my-5 py-3">
+            <div class="row justify-content-center">
+                <div class="col-12 text-center mb-5">
+                    <h2 class="screen-title">What Farmers Say</h2>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <div class="card">
+                                    <div class="card-body p-4 p-md-5 text-center">
+                                        <i class="fas fa-quote-left fa-3x text-success opacity-25 mb-3"></i>
+                                        <p class="lead mb-4">"Plant Health Guardian helped me identify tomato blight early, saving my entire crop. The treatment recommendations were spot on and easy to follow."</p>
+                                        <div class="d-flex justify-content-center">
+                                            <div>
+                                                <h5 class="mb-1">Sarah Johnson</h5>
+                                                <p class="text-muted mb-0">Organic Farmer, California</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="card">
+                                    <div class="card-body p-4 p-md-5 text-center">
+                                        <i class="fas fa-quote-left fa-3x text-success opacity-25 mb-3"></i>
+                                        <p class="lead mb-4">"The crop recommendation system suggested a crop rotation that increased my yield by 30%. This technology is a game-changer for small-scale farmers."</p>
+                                        <div class="d-flex justify-content-center">
+                                            <div>
+                                                <h5 class="mb-1">Michael Thompson</h5>
+                                                <p class="text-muted mb-0">Family Farm Owner, Iowa</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="card">
+                                    <div class="card-body p-4 p-md-5 text-center">
+                                        <i class="fas fa-quote-left fa-3x text-success opacity-25 mb-3"></i>
+                                        <p class="lead mb-4">"Being able to quickly diagnose plant diseases has completely transformed my gardening experience. I'm now able to take action before problems spread."</p>
+                                        <div class="d-flex justify-content-center">
+                                            <div>
+                                                <h5 class="mb-1">Elena Rodriguez</h5>
+                                                <p class="text-muted mb-0">Home Gardener, Texas</p>
+                                            </div>
+                                        </div>
